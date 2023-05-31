@@ -40,7 +40,10 @@ dependencies:
   google_sign_in: ^5.0.0
   get: ^4.6.5
   http: ^1.0.0
-  url_launcher: ^6.1.5
+  flutter_svg: ^2.0.6
+  sqflite: ^2.2.8+4
+  path_provider: ^2.0.15
+  shared_preferences: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +71,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - data/poke.db
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

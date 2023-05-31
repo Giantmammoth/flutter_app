@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poke_app/controller/PokeApi.dart';
 import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -31,9 +32,16 @@ class HomePage extends StatelessWidget {
           itemCount: pokeApi.pokemonList.length,
           itemBuilder: (context, index) {
             var pokemon = pokeApi.pokemonList[index];
-            return Container(
-              color: Color.fromARGB(255, 128, 128, 128),
-              child: Text(pokemon.name),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SvgPicture.network(
+                  pokemon.image,
+                  placeholderBuilder: (context) => CircularProgressIndicator(),
+                  height: 128.0,
+                ),
+                Text(pokemon.name)
+              ],
             );
           }
         ),
