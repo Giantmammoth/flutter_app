@@ -9,6 +9,7 @@ class Loginrequest {
 
   Future<UserModel?> getLogin(String username, String password){
     var result = con.getLogin(username, password);
+    print('result : $result');
     return result;
   }
 }

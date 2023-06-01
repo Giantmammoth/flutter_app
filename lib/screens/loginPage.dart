@@ -15,6 +15,8 @@ class Login extends StatefulWidget {
 
 enum LoginStatus { notSignIn, signIn }
 
+enum Language {english, french}
+
 class _LoginState extends State<Login> implements LoginCallBack {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   late BuildContext _ctx;
@@ -61,11 +63,9 @@ class _LoginState extends State<Login> implements LoginCallBack {
   }
 
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  Language? language = Language.english;
 
   @override
-
   void initState() {
     super.initState();
     getPref();
@@ -94,14 +94,14 @@ class _LoginState extends State<Login> implements LoginCallBack {
                       onSaved: (val) => _username = val!,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(), 
-                        labelText: "Email", 
+                        labelText: "Pseudo", 
                         prefixIcon: Icon(Icons.person_outline),
                         filled: true
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           
-                          return 'Please enter your email';
+                          return 'Please enter your Pseudo';
                         
                         }
                         return null;
@@ -148,6 +148,43 @@ class _LoginState extends State<Login> implements LoginCallBack {
             ),  
           ),
           Padding(
+            padding: EdgeInsets.only(top: 50),
+            child: Column(
+              children: <Widget>[
+                Text('Language'),
+                Row(
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text("English"),
+                      leading: Radio<Language>(
+                        groupValue: language,
+                        value: Language.english,
+                        onChanged: (Language? value) {
+                          setState(() {
+                            language = value;
+                            Get.updateLocale(const Locale('en', 'US'));
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("French"),
+                      leading: Radio<Language>(
+                        groupValue: language,
+                        value: Language.french,
+                        onChanged: (Language? value) {
+                          setState(() {
+                            language = value;
+                            Get.updateLocale(const Locale('fr', 'FR'));
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ]),
+          ),
+          Padding(
             padding: EdgeInsets.only(top: 100),
             child: 
               TextButton(
@@ -167,15 +204,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
     );
   }
 
-  savePref(int value,String user, String pass) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt("value", value);
-      preferences.setString("user", user);
-      preferences.setString("pass", pass);
-      preferences.commit();
-    });
-  }
+  
 
   @override
   void onLoginError(String error) {
@@ -189,19 +218,20 @@ class _LoginState extends State<Login> implements LoginCallBack {
   void onLoginSuccess(UserModel user) async {    
 
     if(user != null){
-      savePref(1,user.username, user.password);
       _loginStatus = LoginStatus.signIn;
+      _showSnackBar(context, "Login success");
+      Navigator.push(
+      context,
+        MaterialPageRoute(
+        builder: (context) => HomePage()),
+    );
     }else{
       _showSnackBar(context, "Login Gagal, Silahkan Periksa Login Anda");
       setState(() {
         _isLoading = false;
       });
     }
-    Navigator.push(
-      context,
-        MaterialPageRoute(
-        builder: (context) => HomePage()),
-    );
+    
   }
   
 }

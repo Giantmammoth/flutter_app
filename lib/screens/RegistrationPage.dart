@@ -94,14 +94,14 @@ class _LoginState extends State<Login> implements LoginCallBack {
                       onSaved: (val) => _username = val!,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(), 
-                        labelText: "Email", 
+                        labelText: "Pseudo", 
                         prefixIcon: Icon(Icons.person_outline),
                         filled: true
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           
-                          return 'Please enter your email';
+                          return 'Please enter your Pseudo';
                         
                         }
                         return null;
@@ -167,15 +167,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
     );
   }
 
-  savePref(int value,String user, String pass) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt("value", value);
-      preferences.setString("user", user);
-      preferences.setString("pass", pass);
-      preferences.commit();
-    });
-  }
+  
 
   @override
   void onLoginError(String error) {
@@ -189,19 +181,20 @@ class _LoginState extends State<Login> implements LoginCallBack {
   void onLoginSuccess(UserModel user) async {    
 
     if(user != null){
-      savePref(1,user.username, user.password);
       _loginStatus = LoginStatus.signIn;
+      _showSnackBar(context, "Login success");
+      Navigator.push(
+      context,
+        MaterialPageRoute(
+        builder: (context) => HomePage()),
+    );
     }else{
       _showSnackBar(context, "Login Gagal, Silahkan Periksa Login Anda");
       setState(() {
         _isLoading = false;
       });
     }
-    Navigator.push(
-      context,
-        MaterialPageRoute(
-        builder: (context) => HomePage()),
-    );
+    
   }
   
 }

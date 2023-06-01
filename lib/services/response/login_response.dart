@@ -17,7 +17,14 @@ class LoginResponse {
   doLogin(String username, String password) {
     loginRequest
         .getLogin(username, password)
-        .then((user) => _callBack.onLoginSuccess(user!))
-        .catchError((onError) => _callBack.onLoginError(onError.toString()));
+        .then((user) =>{
+          print('user: $user'),
+          _callBack.onLoginSuccess(user!),
+          print("hello")
+          })
+        .catchError((onError) => {
+          print(onError),
+          _callBack.onLoginError(onError.toString())
+          });
   } 
 }

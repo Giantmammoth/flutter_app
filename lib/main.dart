@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:poke_app/internationalisation/AppTranslation.dart';
 import 'screens/loginPage.dart';
 
 void main() {
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true
       ),
       home: const Login(title: 'Login App'),
+      locale: Get.deviceLocale,
+      translationsKeys: AppTranslation.translationsKeys,
+      fallbackLocale: Locale('en', 'US'),
     );
   }
 }
