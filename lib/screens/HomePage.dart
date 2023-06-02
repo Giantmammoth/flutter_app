@@ -50,7 +50,11 @@ class HomePage extends StatelessWidget {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile'
+          label: 'Profile',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.star),
+          label: 'Favoris',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.logout),

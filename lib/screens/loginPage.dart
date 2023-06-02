@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:poke_app/controller/internationalisation/TranslationController.dart';
 import 'package:poke_app/models/userModel.dart';
 import 'package:poke_app/services/response/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class Login extends StatefulWidget {
 
 enum LoginStatus { notSignIn, signIn }
 
-enum Language {english, french}
+enum Language {french, english}
 
 class _LoginState extends State<Login> implements LoginCallBack {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
@@ -62,9 +63,19 @@ class _LoginState extends State<Login> implements LoginCallBack {
     });
   }
 
+  TranslationController translationController = Get.put(TranslationController());
+  Language? language = Language.french;
 
-  Language? language = Language.english;
+  // var loc = Get.locale.toString();
 
+  // String labelPseudo() {
+  //   if (loc == "en_US") {
+  //     return "UserName";
+  //   } else {
+  //     return "Nom d'utilisateur";
+  //   }
+  // }
+  
   @override
   void initState() {
     super.initState();
@@ -92,9 +103,10 @@ class _LoginState extends State<Login> implements LoginCallBack {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       onSaved: (val) => _username = val!,
+                      
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(), 
-                        labelText: "Pseudo", 
+                        labelText: 'Pseudo', 
                         prefixIcon: Icon(Icons.person_outline),
                         filled: true
                       ),
@@ -139,7 +151,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
                       style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 128, 128, 128), foregroundColor: Colors.white, minimumSize: Size(500, 70), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     
                       onPressed: _submit,
-                      label: const Text('SE CONNECTER' , style: TextStyle(fontSize: 20),),
+                      label:  Text('connexion'.tr , style: TextStyle(fontSize: 20),),
                       ),                   
                     ) ,
                   )
@@ -147,45 +159,49 @@ class _LoginState extends State<Login> implements LoginCallBack {
               ),
             ),  
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 50),
-            child: Column(
+          Column(
               children: <Widget>[
-                Text('Language'),
+                Text('language'.tr),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    ListTile(
-                      title: const Text("English"),
-                      leading: Radio<Language>(
-                        groupValue: language,
-                        value: Language.english,
-                        onChanged: (Language? value) {
-                          setState(() {
-                            language = value;
-                            Get.updateLocale(const Locale('en', 'US'));
-                          });
-                        },
+                    Row(
+                        children: [
+                          Radio(
+                            value: Language.french,
+                            groupValue: language, 
+                            onChanged: (Language? value) {
+                              setState(() {
+                                language = value;
+                                translationController.changeLanguage("fr", "FR");
+                            });
+                            }
+                          ),
+                          Text('French'.tr)
+                        ],
                       ),
-                    ),
-                    ListTile(
-                      title: const Text("French"),
-                      leading: Radio<Language>(
-                        groupValue: language,
-                        value: Language.french,
-                        onChanged: (Language? value) {
-                          setState(() {
-                            language = value;
-                            Get.updateLocale(const Locale('fr', 'FR'));
-                          });
-                        },
-                      ),
-                    )
+                      Row(
+                        children: [
+                          Radio(
+                            value: Language.english,
+                            groupValue: language, 
+                            onChanged: (Language? value) {
+                              setState(() {
+                                language = value;
+                                translationController.changeLanguage("en", "US");
+                            });
+                            }
+                          ),
+                          Text('English'.tr)
+                        ],) ,
+                      
+                       
                   ],
                 )
               ]),
-          ),
+      
           Padding(
-            padding: EdgeInsets.only(top: 100),
+            padding: EdgeInsets.only(top: 50),
             child: 
               TextButton(
               onPressed: () {
@@ -193,7 +209,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
                     const SnackBar(content: Text("Mots de passe oublier :( !")),
                 );
               }, 
-              child: const Text('Mot de passe oublier ?', style: TextStyle(color: Colors.black45))
+              child: Text('forgotmdp'.tr, style: TextStyle(color: Colors.black45))
               ),
             
           )
