@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poke_app/controller/internationalisation/AppTranslation.dart';
+import 'package:poke_app/routes/AppPage.dart';
+import 'package:poke_app/routes/AppRoutes.dart';
+import 'package:poke_app/screens/Home/HomePage.dart';
 import 'screens/loginPage.dart';
 
 void main() {
@@ -19,7 +22,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 157, 145, 179)),
         useMaterial3: true
       ),
-      home: const Login(title: 'Login App'),
+      initialRoute: AppRoutes.login,
+      getPages: AppPages.list,
+      debugShowCheckedModeBanner: false,
       translations: AppTranslation(),
       locale: const Locale('fr', 'FR'),
       fallbackLocale: const Locale('fr', 'FR'),

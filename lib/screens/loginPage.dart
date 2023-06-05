@@ -4,11 +4,10 @@ import 'package:poke_app/controller/internationalisation/TranslationController.d
 import 'package:poke_app/models/userModel.dart';
 import 'package:poke_app/services/response/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'HomePage.dart';
+import 'Home/HomePage.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key, required this.title});
-  final String title;
+  const Login({super.key});
 
   @override
   State<Login> createState() => new _LoginState();
@@ -236,11 +235,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
     if(user != null){
       _loginStatus = LoginStatus.signIn;
       _showSnackBar(context, "Login success");
-      Navigator.push(
-      context,
-        MaterialPageRoute(
-        builder: (context) => HomePage()),
-    );
+      Get.toNamed('/');
     }else{
       _showSnackBar(context, "Login Gagal, Silahkan Periksa Login Anda");
       setState(() {
