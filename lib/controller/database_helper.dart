@@ -15,27 +15,33 @@ class DatabaseHelper {
   static Database? _db;
 
   Future<Database?> get db async {
-  DatabaseHelper con = new DatabaseHelper();
   if (_db != null) {
     print("db not null");
     return _db;
   }
   print("db null");
   _db = await initDb();
-  var dbClient = await con.db;
-  if (dbClient != null) {
-    await dbClient.execute('''
-      CREATE TABLE user(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        password TEXT
-      )
-    ''');
-    
+  DatabaseHelper con = new DatabaseHelper();
+    var dbClient = await con.db;
+    if (dbClient != null) {
+      await dbClient.execute('''
+        CREATE TABLE user(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT,
+          password TEXT
+        )
+      ''');
+      await dbClient.execute('''
+        CREATE TABLE pokemon(
+          id INTEGER PRIMARY KEY,
+          name TEXT,
+          image TEXT
+        )
+      ''');
+      
       UserModel user = new UserModel("toavina", "toavina");
       await dbClient.insert("User", user.toMap());
-  }
-  
+    }
   return _db;
 }
 
@@ -57,6 +63,7 @@ class DatabaseHelper {
     
 
     var dBase = await openDatabase(path);
+    
     return dBase;
   }
 

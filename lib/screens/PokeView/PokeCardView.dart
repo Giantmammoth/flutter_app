@@ -30,7 +30,7 @@ class PokeCardView extends GetView<PokeCardViewCrtl> {
           itemBuilder: (context, index) {
             var pokemon = pokeApi.pokemonList[index];
             return
-            PokemonCard(pokeApi: pokeApi, pokemon: pokemon, i: index);
+            PokemonCard(pokemon: pokemon);
           }
         ),
       );

@@ -1,80 +1,89 @@
 
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:poke_app/controller/PokeApi.dart';
 import 'package:poke_app/models/PokeModel.dart';
 
-class PokemonCard extends StatelessWidget {
-    const PokemonCard({
+import '../services/response/poke_response.dart';
+
+class PokemonCard extends StatefulWidget {
+  const PokemonCard({
     Key? key,
-    required this.pokeApi,
     required this.pokemon,
-    required this.i,
   }) : super(key: key);
 
-  final PokeApi pokeApi;
   final Pokemon pokemon;
-  final int i;
 
   @override
+  State<PokemonCard> createState() => _PokemonCardState();
+
+}
+
+class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
+  bool _isLoading = false;
+  late PokeResponse pokeResponse;
+
+  _PokemonCardState() {
+    pokeResponse = PokeResponse(this);
+  }
+  void addToFavoris() {
+    _isLoading = true;
+    pokeResponse.addPoke(widget.pokemon);
+  }
+  void _showSnackBar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(text),
+    ),
+  );
+}
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: getPokemonColor(pokemon.type), 
-          
+    return Card(
+      color: Colors.grey, 
       child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SvgPicture.network(
-                  pokemon.image,
-                  placeholderBuilder: (context) => CircularProgressIndicator(),
-                  height: 128.0,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(onPressed: addToFavoris, icon: Icon(Icons.favorite_border))
+                  ],
                 ),
-                Text(pokemon.name)
+                
+                SvgPicture.network(
+                  widget.pokemon.image,
+                  placeholderBuilder: (context) => CircularProgressIndicator(),
+                  height: 100.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 3),
+                  child: Column(
+                    children: <Widget>[
+                      Text(widget.pokemon.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                )
+                
               ],
           ),
         
     );
   }
-
-   Color getPokemonColor(String? type) {
-    switch (type) {
-      case "grass":
-        return Colors.green;
-      case "fire":
-        return Colors.red;
-      case "water":
-        return Colors.blue;
-      case "poison":
-        return Colors.purple;
-      case "psychic":
-        return Colors.purple;
-      case "normal":
-        return Colors.brown;
-      case "ground":
-        return Color.fromARGB(225, 100, 66, 54);
-      case "bug":
-        return Color.fromARGB(255, 1, 88, 20);
-      case "rock":
-        return Color.fromARGB(255, 116, 116, 116);
-        
-      case "steel":
-        return Color.fromARGB(255, 116, 116, 116);
-        
-      case "electric":
-        return Color.fromARGB(255, 229, 233, 0);
-        
-      case "fairy":
-        return Color.fromARGB(255, 203, 0, 221);
-        
-      case "ghost":
-        return Color.fromARGB(255, 52, 0, 136);
-        
-      case "dragon":
-        return Color.fromARGB(255, 52, 0, 136);
-        
-      default:
-        return Colors.grey;
-    }
+  
+  @override
+  void onGetPokeFavError(String error) {
+    _showSnackBar(context, "Pokemon deja dans le favoris");
+    setState(() {
+      _isLoading = false;
+    });
+  }
+  
+  @override
+  void onGetPokeFavSuccess(dynamic pokemon) {
+    _showSnackBar(context, "Pokemo ajouter dans le favoris");
+      setState(() {
+        _isLoading = false;
+      });
   }
 }

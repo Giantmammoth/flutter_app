@@ -19,7 +19,7 @@ class PokeApi extends GetxController {
     try{
       isLoading.value = true;
       http.Response response = await ApiClient.client.get(Uri.tryParse(
-        "https://pokeapi.co/api/v2/pokemon?limit=250")!);
+        "https://pokeapi.co/api/v2/pokemon?limit=50")!);
       if (response.statusCode == 200) {
         var j = jsonDecode(response.body)["results"];
         var pks = <Map<String, dynamic>>[];

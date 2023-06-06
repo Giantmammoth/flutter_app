@@ -26,7 +26,7 @@ class Authsqflite {
     if (res.length > 0) {
       var result = new UserModel.fromMap(res.first);
       return result;
-    }
+  }
 
     return null;
   }
