@@ -41,6 +41,12 @@ dependencies:
   sqflite: ^2.2.8+4
   path_provider: ^2.0.15
   shared_preferences: ^2.1.1
+  firebase_auth: 
+  firebase_core:
+  firebase_dynamic_links: 
+  equatable: ^2.0.5
+  cloud_firestore: 
+  provider:
 
 dev_dependencies:
   flutter_test:

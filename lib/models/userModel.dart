@@ -1,24 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserModel {
-   late String _id;
-   late String _username;
-   late String _password;
+class UserModel{
+  final String email;
+  final String name;
+  final String uid;
+  final String username;
+  
 
-  UserModel(this._username, this._password);
+  UserModel(
+      {required this.email,
+      required this.name,
+      required this.username,
+      required this.uid,
+      });
 
-  UserModel.fromMap(dynamic obj) {
-    this._username = obj['username'];
-    this._password = obj['password'];
+  Map<String, dynamic> toJson() => {
+        "email": email,
+        "uid": uid,
+        "name": name,
+        "username": username,
+        
+      };
+
+  static UserModel? fromSnap (DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+    return UserModel(
+      username: snapshot['username'],
+      uid: snapshot['uid'],
+      name: snapshot['name'],
+      email: snapshot['email'],
+    );
   }
-
-  String get username => _username;
-  String get password => _password;
-
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-    map["username"] = _username;
-    map["password"] = _password;
-    return map;
-  }
-
 }

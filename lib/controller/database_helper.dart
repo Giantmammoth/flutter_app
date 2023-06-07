@@ -25,13 +25,6 @@ class DatabaseHelper {
     var dbClient = await con.db;
     if (dbClient != null) {
       await dbClient.execute('''
-        CREATE TABLE user(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT,
-          password TEXT
-        )
-      ''');
-      await dbClient.execute('''
         CREATE TABLE pokemon(
           id INTEGER PRIMARY KEY,
           name TEXT,
@@ -39,8 +32,8 @@ class DatabaseHelper {
         )
       ''');
       
-      UserModel user = new UserModel("toavina", "toavina");
-      await dbClient.insert("User", user.toMap());
+      // UserModel user = new UserModel("toavina", "toavina");
+      // await dbClient.insert("User", user.fro());
     }
   return _db;
 }

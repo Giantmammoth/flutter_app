@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:poke_app/controller/auth/firebase_auth.dart';
 import 'package:poke_app/controller/internationalisation/TranslationController.dart';
-import 'package:poke_app/models/userModel.dart';
-import 'package:poke_app/services/response/login_response.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'Home/HomePage.dart';
 
 class Login extends StatefulWidget {
@@ -13,72 +11,44 @@ class Login extends StatefulWidget {
   State<Login> createState() => new _LoginState();
 }
 
-enum LoginStatus { notSignIn, signIn }
 
 enum Language {french, english}
 
-class _LoginState extends State<Login> implements LoginCallBack {
-  LoginStatus _loginStatus = LoginStatus.notSignIn;
-  late BuildContext _ctx;
-  bool _isLoading = false;
+class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
-  final scaffoldkey = new GlobalKey<ScaffoldState>();
-
-  late String _username, _password;
-
-  late LoginResponse _response;
-
-  _LoginState() {
-    _response = new LoginResponse(this);
-  }
-
-  void _submit() {
-    final form = formKey.currentState;
-
-    if(form!.validate()) {
-      setState(() {
-        _isLoading = true;
-        form.save();
-        _response.doLogin(_username, _password);
-      });
-    }
-  }
-
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isloading = false; 
   void _showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(text),
     ),
   );
-}
-
-  var value;
-  getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      value = preferences.getInt("value");
-
-      _loginStatus = value == 1 ? LoginStatus.signIn : LoginStatus.notSignIn;
-    });
   }
+
+  void _submit() async {
+    setState(() {
+      _isloading = true;
+    });
+    String result = await AuthCrtl().loginUser(
+      email: _emailController.text, password: _passwordController.text);
+    if (result == 'Login success') {
+      Get.toNamed('/');
+      _showSnackBar(context, result);
+    } else {
+      _showSnackBar(context, result);
+    }
+  }
+
 
   TranslationController translationController = Get.put(TranslationController());
   Language? language = Language.french;
 
-  // var loc = Get.locale.toString();
-
-  // String labelPseudo() {
-  //   if (loc == "en_US") {
-  //     return "UserName";
-  //   } else {
-  //     return "Nom d'utilisateur";
-  //   }
-  // }
   
   @override
   void initState() {
     super.initState();
-    getPref();
   }
 
   Widget build(BuildContext context) {
@@ -101,11 +71,10 @@ class _LoginState extends State<Login> implements LoginCallBack {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      onSaved: (val) => _username = val!,
-                      
+                      controller: _emailController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(), 
-                        labelText: 'Pseudo', 
+                        labelText: 'Email', 
                         prefixIcon: Icon(Icons.person_outline),
                         filled: true
                       ),
@@ -123,7 +92,7 @@ class _LoginState extends State<Login> implements LoginCallBack {
                     padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       child: TextFormField(
-                        onSaved: (val) => _password = val!,
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black12)), 
@@ -219,30 +188,4 @@ class _LoginState extends State<Login> implements LoginCallBack {
     );
   }
 
-  
-
-  @override
-  void onLoginError(String error) {
-    _showSnackBar(context, error);
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void onLoginSuccess(UserModel user) async {    
-
-    if(user != null){
-      _loginStatus = LoginStatus.signIn;
-      _showSnackBar(context, "Login success");
-      Get.toNamed('/');
-    }else{
-      _showSnackBar(context, "Login Gagal, Silahkan Periksa Login Anda");
-      setState(() {
-        _isLoading = false;
-      });
-    }
-    
-  }
-  
 }
