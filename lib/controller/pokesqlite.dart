@@ -1,17 +1,21 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:poke_app/models/PokeModel.dart';
 
 import 'database_helper.dart';
 
 class pokesqlite {
   DatabaseHelper con = new DatabaseHelper();
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<int?> addPokemonFavoris (Pokemon pokemon) async {
     var dbClient = await con.db;
+    var res = 0;
     var poke = await getPokemonFavoris(pokemon.name);
+  
     if (poke == null) {
-      int res = await dbClient!.insert("pokemon", pokemon.toMap());
+      res = await dbClient!.insert("pokemon", pokemon.toMap());
       return res;
     }
     return null;
@@ -38,7 +42,8 @@ class pokesqlite {
 
   Future<List<Pokemon>> getAllPokemon() async {
     final db = await con.db;
-    final res = await db!.rawQuery("SELECT * FROM pokemon");
+    var uid = _firebaseAuth.currentUser!.uid;
+    final res = await db!.rawQuery("SELECT * FROM pokemon WHERE uid = '$uid'");
 
     List<Pokemon> list =
         res.isNotEmpty ? res.map((c) => Pokemon.fromJson(c)).toList() : [];

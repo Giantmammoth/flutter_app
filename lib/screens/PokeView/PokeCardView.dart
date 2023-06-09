@@ -6,13 +6,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:poke_app/components/PokeCard.dart';
 import 'package:poke_app/controller/PokeApi.dart';
+import 'package:poke_app/services/response/poke_response.dart';
 
-import 'PokeCardViewCrtl.dart';
 
-class PokeCardView extends GetView<PokeCardViewCrtl> {
-  PokeApi pokeApi = Get.put(PokeApi());
-
+class PokeCardView extends StatefulWidget {
   PokeCardView({super.key});
+
+  @override
+  State<PokeCardView> createState() => _PokeCardViewState();
+}
+
+class _PokeCardViewState extends State<PokeCardView> {
+  PokeApi pokeApi = Get.put(PokeApi());
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,7 @@ class PokeCardView extends GetView<PokeCardViewCrtl> {
             var pokemon = pokeApi.pokemonList[index];
             return
             PokemonCard(pokemon: pokemon);
+
           }
         ),
       );

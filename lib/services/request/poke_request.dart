@@ -8,12 +8,12 @@ class Pokerequest {
 
   Future<int?> addPokefav(Pokemon pokemon){
     var result = con.addPokemonFavoris(pokemon);
-    print('result : $result');
     return result;
   }
 
   Future<List<Pokemon>> getAllPoke() {
     var result = con.getAllPokemon();
+    print("allpoke: $result");
     return result;
   }
 }

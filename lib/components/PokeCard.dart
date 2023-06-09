@@ -14,6 +14,7 @@ class PokemonCard extends StatefulWidget {
   }) : super(key: key);
 
   final Pokemon pokemon;
+  
 
   @override
   State<PokemonCard> createState() => _PokemonCardState();
@@ -27,9 +28,9 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
   _PokemonCardState() {
     pokeResponse = PokeResponse(this);
   }
-  void addToFavoris() {
+  void addToFavoris(Pokemon pokemon) {
     _isLoading = true;
-    pokeResponse.addPoke(widget.pokemon);
+    pokeResponse.addPoke(pokemon);
   }
   void _showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +48,7 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: addToFavoris, icon: Icon(Icons.favorite_border))
+                    IconButton(onPressed: () => addToFavoris(widget.pokemon), icon: Icon(Icons.favorite_border))
                   ],
                 ),
                 
@@ -81,7 +82,7 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
   
   @override
   void onGetPokeFavSuccess(dynamic pokemon) {
-    _showSnackBar(context, "Pokemo ajouter dans le favoris");
+    _showSnackBar(context, "Pokemon ajouter dans le favoris");
       setState(() {
         _isLoading = false;
       });

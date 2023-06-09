@@ -14,7 +14,6 @@ class PokeResponse {
   addPoke(Pokemon pokemon) {
     pokerequest.addPokefav(pokemon)
         .then((pokemon) =>{
-          print('pokemon: $pokemon'),
           _callBack.onGetPokeFavSuccess(pokemon!),
           print("hello")
           })

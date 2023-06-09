@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:poke_app/screens/PokeView/PokeCardView.dart';
@@ -12,6 +13,8 @@ import 'package:poke_app/screens/loginPage.dart';
 class HomePage extends StatelessWidget {
 
   final controller = Get.put(HomeCrtl());
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeCrtl>(
@@ -76,7 +79,7 @@ class HomePage extends StatelessWidget {
 _bottomNavigationBarItem({IconData? icon, String? label}) {
     return BottomNavigationBarItem(
       icon: Icon(icon),
-      label: label,
+      label: label,    
     );
   }
 }
