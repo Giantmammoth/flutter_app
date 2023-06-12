@@ -21,19 +21,19 @@ class pokesqlite {
     return null;
   }
 
-  Future<int> deletePokemonFavoris(String pokemon) async {
+  Future<int> deletePokemonFavoris(String idpoke) async {
+    print("idpoke: $idpoke");
     var dbClient = await con.db;
-    int res = await dbClient!.delete("pokemon");
+    int res = await dbClient!.delete("pokemon", where: "id = '$idpoke'");
+    print("is delete ? $res");
     return res;
   }
 
   Future<Pokemon?> getPokemonFavoris(String name) async {
     var dbClient = await con.db;
     var res = await dbClient!.rawQuery("SELECT * FROM pokemon WHERE name = '$name'");
-    print('resPoke: $res');
     if (res.length > 0) {
       var result = Pokemon.fromMap(res.first);
-      print(result);
       return result;
   }
 

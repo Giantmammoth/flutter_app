@@ -26,8 +26,8 @@ class DatabaseHelper {
     if (dbClient != null) {
       await dbClient.execute('''
         CREATE TABLE pokemon(
-          id INTEGER PRIMARY KEY,
           uid TEXT,
+          id TEXT,
           name TEXT,
           image TEXT
         )

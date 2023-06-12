@@ -36,7 +36,7 @@ class _FavorisPageState extends State<FavorisPage>  {
           itemBuilder: (context, index) {
             var pokemon = homeCrtl.pokeList[index];
             return
-            PokemonCard(pokemon: pokemon);
+            PokemonCard(pokemonList: homeCrtl.pokeList, pokemon: pokemon, id: index);
           }
         ),
       );

@@ -15,10 +15,24 @@ class PokeResponse {
     pokerequest.addPokefav(pokemon)
         .then((pokemon) =>{
           _callBack.onGetPokeFavSuccess(pokemon!),
-          print("hello")
+          print("poke added")
           })
         .catchError((onError) => {
-          print(onError),
+          // pokerequest.removePokeFav(pokemon.id),
+          // print("poke removed"),
+          _callBack.onGetPokeFavError(onError.toString())
+          });
+  }
+
+  removePoke(String idpoke) {
+    pokerequest.removePokeFav(idpoke)
+        .then((pokemon) =>{
+          _callBack.onGetPokeFavSuccess(pokemon!),
+          print("poke removed")
+          })
+        .catchError((onError) => {
+          // pokerequest.removePokeFav(pokemon.id),
+          // print("poke removed"),
           _callBack.onGetPokeFavError(onError.toString())
           });
   } 

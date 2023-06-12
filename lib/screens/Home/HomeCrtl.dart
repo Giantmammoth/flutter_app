@@ -15,9 +15,12 @@ class HomeCrtl extends GetxController {
   late PokeResponse _response;
   var isLoading = false.obs;
   
-  void changeTabIndex (int index) async {
+  void changeTabIndex (int index)  async {
     tabIndex = index;
+    
     if (tabIndex == 0) {
+      Future<List<Pokemon>> pokedata = con.getAllPokemon();
+      pokeList = await pokedata;
       analytics.setCurrentScreen(screenName: "Pokemon");
     }
     if (tabIndex == 1) {

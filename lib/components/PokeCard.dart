@@ -2,18 +2,22 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:poke_app/controller/PokeApi.dart';
 import 'package:poke_app/models/PokeModel.dart';
+import 'package:poke_app/screens/Home/HomeCrtl.dart';
 
 import '../services/response/poke_response.dart';
 
 class PokemonCard extends StatefulWidget {
   const PokemonCard({
     Key? key,
+    required this.pokemonList,
     required this.pokemon,
+    required this.id
   }) : super(key: key);
 
+  final List<Pokemon> pokemonList;
   final Pokemon pokemon;
+  final int id;
   
 
   @override
@@ -22,16 +26,22 @@ class PokemonCard extends StatefulWidget {
 }
 
 class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
-  bool _isLoading = false;
+
+  HomeCrtl homeCrtl = Get.put(HomeCrtl());
   late PokeResponse pokeResponse;
 
   _PokemonCardState() {
     pokeResponse = PokeResponse(this);
   }
+
   void addToFavoris(Pokemon pokemon) {
-    _isLoading = true;
     pokeResponse.addPoke(pokemon);
   }
+
+void removeToFavoris (String idpoke) {
+    pokeResponse.removePoke(idpoke);
+  }
+
   void _showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -39,6 +49,12 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
     ),
   );
 }
+
+@override
+void initState() {
+  super.initState();
+}
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -48,7 +64,9 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: () => addToFavoris(widget.pokemon), icon: Icon(Icons.favorite_border))
+                    homeCrtl.pokeList.contains(widget.pokemonList[widget.id])
+                    ? IconButton(onPressed: () => removeToFavoris(homeCrtl.pokeList[widget.id].id), icon: Icon(Icons.favorite), color: Colors.red)
+                    : IconButton(onPressed: () => addToFavoris(widget.pokemonList[widget.id]), icon: Icon(Icons.favorite),)
                   ],
                 ),
                 
@@ -74,17 +92,16 @@ class _PokemonCardState extends State<PokemonCard> implements PokeCallBack {
   
   @override
   void onGetPokeFavError(String error) {
-    _showSnackBar(context, "Pokemon deja dans le favoris");
-    setState(() {
-      _isLoading = false;
-    });
+    _showSnackBar(context, error);
   }
   
   @override
   void onGetPokeFavSuccess(dynamic pokemon) {
+    if(homeCrtl.pokeList.contains(widget.pokemonList[widget.id])) {
+    _showSnackBar(context, "Pokemon supprimer du favoris");
+    } 
+     else {
     _showSnackBar(context, "Pokemon ajouter dans le favoris");
-      setState(() {
-        _isLoading = false;
-      });
+    }
   }
 }

@@ -11,6 +11,11 @@ class Pokerequest {
     return result;
   }
 
+  Future<int?> removePokeFav(String idpoke){
+    var result = con.deletePokemonFavoris(idpoke);
+    return result;
+  }
+
   Future<List<Pokemon>> getAllPoke() {
     var result = con.getAllPokemon();
     print("allpoke: $result");

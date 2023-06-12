@@ -1,11 +1,10 @@
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:poke_app/components/PokeCard.dart';
 import 'package:poke_app/controller/PokeApi.dart';
+import 'package:poke_app/screens/Home/HomeCrtl.dart';
 import 'package:poke_app/services/response/poke_response.dart';
 
 
@@ -18,6 +17,7 @@ class PokeCardView extends StatefulWidget {
 
 class _PokeCardViewState extends State<PokeCardView> {
   PokeApi pokeApi = Get.put(PokeApi());
+  HomeCrtl homeCrtl = Get.put(HomeCrtl());
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,8 @@ class _PokeCardViewState extends State<PokeCardView> {
           itemBuilder: (context, index) {
             var pokemon = pokeApi.pokemonList[index];
             return
-            PokemonCard(pokemon: pokemon);
-
+            PokemonCard(pokemonList: pokeApi.pokemonList, pokemon: pokemon, id: index);
+            
           }
         ),
       );
